@@ -5,9 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>EXIS AI Music — 音乐工业化生产工具 + 音乐综合智能体</title>
 <link rel="stylesheet" href="assets/css/demo.css">
+<style>
+  /* Critical: never leave a blank page before JS runs */
+  body{background:#0c0c0e;color:#eceae4}
+  .access-gate{display:flex}
+  #boot-hint{position:fixed;bottom:12px;left:0;right:0;text-align:center;font-size:11px;color:#5c5a56;z-index:600}
+</style>
 </head>
 <body>
-<div id="access-gate" class="access-gate">
+<noscript><p style="padding:24px;color:#eceae4">请启用 JavaScript，并使用 start_demo.bat 后访问 http://127.0.0.1:8765/</p></noscript>
+<p id="boot-hint">正在连接 EXIS AI Music Demo…</p>
+<div id="access-gate" class="access-gate open">
   <div class="gate-card">
     <div class="gate-program" id="gate-program">ORIGEN TRAIL</div>
     <div class="gate-product" id="gate-product">EXIS AI Music</div>
@@ -204,6 +212,6 @@
 
 <footer class="footer-note">© <span id="footer-copyright">winboy.ai</span> · ORIGEN TRAIL Confidential · EXIS Layer A Music Preview · <span id="audio-build" style="color:var(--accent)">audio …</span></footer>
 </main></div></div>
-<script type="module" src="assets/js/demo.js"></script>
+<script type="module" src="assets/js/demo.js?v=20250617"></script>
 </body>
 </html>

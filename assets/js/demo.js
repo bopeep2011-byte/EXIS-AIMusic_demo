@@ -32,7 +32,7 @@ function renderIntegration(civ) {
 
 function renderM1(d) {
   $("#m1-sample-title").textContent = d.sample?.title || "demo1";
-  const s = d.structure_analysis;
+  const s = d.structure_analysis || {};
   $("#m1-stats").innerHTML = ["bars","phrases","cadences","token_count","note_events"].map((k,i) => {
     const labels = ["Bars","Phrases","Cadences","Tokens","Notes"];
     return `<div class="stat"><div class="val">${[s.bars,s.phrases,s.cadences,s.token_count,s.note_events][i]}</div><div class="lbl">${labels[i]}</div></div>`;
@@ -89,20 +89,39 @@ async function loadM4Select() {
 
 function alert(e) { console.error(e); window.alert(e.message || e); }
 
+function showBootError(msg) {
+  console.error(msg);
+  document.getElementById("boot-hint")?.remove();
+  const gate = $("#access-gate");
+  gate?.classList.add("open");
+  gate?.classList.remove("closed");
+  $("#app-shell")?.classList.add("locked");
+  const errEl = $("#gate-error");
+  if (errEl) errEl.textContent = msg;
+}
+
 async function init() {
   $$(".nav-btn").forEach((b) => b.addEventListener("click", () => showModule(b.dataset.module)));
   $("#btn-refresh-m1")?.addEventListener("click", () => loadM1().catch(alert));
   $("#btn-play-melody")?.addEventListener("click", () => $("#m1-audio")?.play());
-  $("#btn-run-m2")?.addEventListener("click", () => loadM2(null).catch(alert));
+  $("#btn-run-m2")?.addEventListener("click", () => loadM2("A").catch(alert));
   try {
     await ensureAccessGate(fetchJson);
+    document.getElementById("boot-hint")?.remove();
+
     const meta = await fetchJson("/api/meta");
     $("#tagline-zh").textContent = meta.tagline_zh || "";
     $("#audio-build").textContent = `audio ${meta.audio_catalog || "?"} · ${meta.demo_build || ""}`;
     renderIntegration(await fetchJson("/api/integration"));
     renderM2Presets(await fetchJson("/api/m2/presets"));
-    await Promise.all([loadM1(), loadM1Audio(), loadM2("A"), loadM3(), loadM4Select()]);
-  } catch (e) { console.error(e); }
+
+    // Show UI first; M2 model inference can take several seconds.
+    await Promise.all([loadM1(), loadM1Audio(), loadM3(), loadM4Select()]);
+    loadM2("A").catch(alert);
+  } catch (e) {
+    showBootError((e && (e.message || e.error)) ||
+      "无法连接服务端，请先运行 start_demo.bat，然后打开 http://127.0.0.1:8765/");
+  }
 }
 
 init();

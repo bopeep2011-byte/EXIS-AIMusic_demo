@@ -56,8 +56,8 @@ main{padding:20px 24px 40px;overflow-y:auto}
 .surface-card h4{font-size:13px;margin-bottom:6px;color:var(--blue)}
 .footer-note{margin-top:32px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text3)}
 .app-shell.locked{display:none}
-.access-gate{display:none;position:fixed;inset:0;z-index:500;background:radial-gradient(ellipse at 30% 20%,#1a1830 0%,var(--bg) 55%);align-items:center;justify-content:center;padding:20px}
-.access-gate.open{display:flex}
+.access-gate{display:flex;position:fixed;inset:0;z-index:500;background:radial-gradient(ellipse at 30% 20%,#1a1830 0%,var(--bg) 55%);align-items:center;justify-content:center;padding:20px}
+.access-gate.closed{display:none}
 .gate-card{width:100%;max-width:480px;background:var(--bg1);border:1px solid var(--border);border-radius:16px;padding:28px}
 .gate-program{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--amber);text-align:center}
 .gate-product{font-size:22px;font-weight:700;text-align:center;margin-top:6px}

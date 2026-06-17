@@ -1,11 +1,21 @@
 const SESSION_KEY = "exis_origen_trail_session";
 
 export async function ensureAccessGate(fetchJson) {
+  const gate = document.getElementById("access-gate");
+  gate?.classList.add("open");
+  gate?.classList.remove("closed");
+  document.getElementById("boot-hint")?.remove();
+
+  if (location.protocol === "file:") {
+    throw new Error("请运行 start_demo.bat，在浏览器打开 http://127.0.0.1:8765/ （不要直接双击 index.html）");
+  }
+
   const saved = getSession();
   if (saved) { hideGate(); return saved; }
   const policy = await fetchJson("/api/access/policy");
   renderGate(policy);
-  document.getElementById("access-gate").classList.add("open");
+  gate?.classList.add("open");
+  gate?.classList.remove("closed");
   return new Promise((resolve, reject) => {
     document.getElementById("access-form").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -38,7 +48,9 @@ function getSession() {
 }
 
 function hideGate() {
-  document.getElementById("access-gate")?.classList.remove("open");
+  const gate = document.getElementById("access-gate");
+  gate?.classList.remove("open");
+  gate?.classList.add("closed");
   document.getElementById("app-shell")?.classList.remove("locked");
 }
 
