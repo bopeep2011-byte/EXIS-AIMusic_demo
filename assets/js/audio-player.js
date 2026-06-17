@@ -9,12 +9,9 @@ function toPlayableUrl(url) {
   try {
     if (url.startsWith("http")) {
       const u = new URL(url);
-      if (u.pathname.startsWith("/api/audio/") && !location.hostname.includes("ngrok")) {
-        return `${u.pathname}${u.search}`;
-      }
-      return url;
+      if (u.pathname.startsWith("/api/audio/")) return url;
     }
-    if (backendOrigin && url.startsWith("/") && location.hostname.includes("ngrok")) {
+    if (url.startsWith("/api/audio/") && backendOrigin) {
       return `${backendOrigin}${url}`;
     }
   } catch {
@@ -27,7 +24,7 @@ function needsNgrokHeader(url) {
   try {
     return new URL(url, location.origin).hostname.includes("ngrok");
   } catch {
-    return location.hostname.includes("ngrok");
+    return Boolean(backendOrigin) || location.hostname.includes("ngrok");
   }
 }
 
@@ -81,10 +78,10 @@ async function loadAudioElement(el, url) {
       el.addEventListener("error", fail);
       el.load();
     });
-    setAudioHint(el, `已就绪 · ${(blob.size / 1024 / 1024).toFixed(1)} MB`);
+    setAudioHint(el, `已就绪 · ${(blob.size / 1024 / 1024).toFixed(1)} MB · 请点 ▶ 播放`);
   } catch (e) {
     console.error("audio load failed", fullUrl, e);
-    setAudioHint(el, `音频加载失败：${e.message || e}（请点 ▶ 重试或刷新）`, true);
+    setAudioHint(el, `音频加载失败：${e.message || e}`, true);
     if (el._blobUrl) URL.revokeObjectURL(el._blobUrl);
     el._blobUrl = null;
     el.removeAttribute("src");
