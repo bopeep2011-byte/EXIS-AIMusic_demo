@@ -71,3 +71,5 @@ EXIS_API_ORIGIN = https://你的-flask-服务器地址
 将 `demo_server.py` 部署到云主机 / Railway / Render，或用 ngrok 暴露本地 `8765` 端口。
 
 未配置时，M1–M4 会提示 `backend_required`，本地完整体验仍用 `start_demo.bat`。
+
+**详细图文步骤见 [NETLIFY_BACKEND.md](NETLIFY_BACKEND.md)**（隧道 / 环境变量 / 验证清单）。
