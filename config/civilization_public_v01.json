@@ -1,0 +1,156 @@
+{
+  "version": "exis_civilization_public_v01",
+  "copyright": "winboy.ai",
+  "system_title": "EXIS — Existence Infrastructure System",
+  "tagline_zh": "现实校准型文明级认知基础设施",
+  "chain": {
+    "layer_C": {
+      "name": "Universal Structural Kernel",
+      "name_zh": "统一结构内核层",
+      "modules": ["State Vector", "Tension Field", "Entropy Surface", "Attractor Basin", "Recursive Observer"],
+      "demo_relation_zh": "理论锚点 · Demo 通过 NOX 标签向上引用，不直接运行内核"
+    },
+    "nox": {
+      "name": "Capability Tag Engine",
+      "name_zh": "能力标签系统 · 跨层语义接口",
+      "role_zh": "连接 Layer C / B / A 的语义路由与能力订阅总线"
+    },
+    "layer_B": {
+      "name": "Civilization Dynamics",
+      "name_zh": "文明动力学层",
+      "modules": ["State", "Constraint", "Transition", "Tension", "Five Fields"],
+      "anchor_zh": "现实锚定 · 产品化约束"
+    },
+    "layer_A": {
+      "name": "Reality Product System",
+      "name_zh": "现实工业层 · 可部署落地系统",
+      "clusters": ["EXIS AI", "EXIS Intelligence"]
+    }
+  },
+  "products": {
+    "exis_ai_music": {
+      "name": "EXIS AI Music",
+      "parent": "EXIS AI",
+      "positioning_zh": "隶属 EXIS AI 的音乐工业化生产工具 + 音乐综合智能体",
+      "positioning_en": "Under EXIS AI — Music Industrialization Production Toolkit + Comprehensive Music Intelligence Agent",
+      "dual_role": {
+        "industrialization_zh": "音乐工业化生产工具 — EXIS Studio · AMUP · 标注/Token/训练/质检管线",
+        "intelligence_agent_zh": "音乐综合智能体 — 结构理解 · 语言建模 · FM 工作流 · Edge 运行时协同"
+      },
+      "pipeline": "EXIS Studio · AMUP Pipeline",
+      "demo_role_zh": "本 Preview 展示 EXIS AI 音乐簇：工业化工具链 + 综合智能体能力预览",
+      "protocol": "studio.music_language.v1"
+    },
+    "exis_studio": {
+      "name": "EXIS Studio",
+      "role_zh": "数据工业化 · 标注/Token/训练管线宿主",
+      "protocol": "studio.music_language.v1",
+      "inbound_tags": ["music.structure.*", "music.language.*", "music.model.*"],
+      "outbound_tags": ["annotation_quality_tags"]
+    },
+    "exis_ai_film_kaelo": {
+      "name": "AI Film — Kaelo",
+      "role_zh": "生命叙事 · 人格影片生成",
+      "agents": ["Meaning Agent", "Narrative Agent"],
+      "protocol": "kaelo.narrative_structure.v1",
+      "bridge_zh": "M4 Generation Plan → narrative beat sheet 结构映射"
+    },
+    "ai_file": {
+      "name": "AI File",
+      "role_zh": "扩展域"
+    }
+  },
+  "nox_protocol": {
+    "envelope_version": "0.1",
+    "transport_zh": "JSON Capability Tag Envelope · REST / 本地 IPC",
+    "fields": ["nox_version", "source_module", "capability_tags", "verification_tier", "timestamp_utc"],
+    "routing": {
+      "exis_studio": "annotation_quality_tags",
+      "kaelo_film": "narrative_motif_tags",
+      "edge_runtime": "performance_budget_tags",
+      "game_stream_ue": "runtime_scene_tags"
+    }
+  },
+  "intelligence_path": {
+    "title": "EXIS Intelligence · 认知连续体演化路径",
+    "stages": [
+      {"stage": 1, "name": "Learning Engine", "demo_map": "M2 Stage1 CLM · 音乐语言学习闭环"},
+      {"stage": 2, "name": "Accumulation", "demo_map": "记忆累积 · 跨会话连续性（Preview）"},
+      {"stage": 3, "name": "Narrative Identity", "demo_map": "Kaelo / M4 叙事结构桥接"},
+      {"stage": 4, "name": "Second Cognitive Life", "demo_map": "长期路线图"}
+    ],
+    "artifact": "EXIS v0.5 · Strategic Pressure Artifact"
+  },
+  "edge_deploy": {
+    "strategy_zh": "Cloud Music Brain → Compressed Model → Edge SoC → Audio MCU",
+    "pipeline": [
+      "Cloud FM training",
+      "Model compression / distillation",
+      "M200e edge inference runtime",
+      "IM3 audio expression layer"
+    ],
+    "platforms": {
+      "M200e": {
+        "role": "Edge SoC · 主推理运行时",
+        "cpu": "ARM Cortex-A55 ×4 @ 1.5–1.8 GHz",
+        "ram_min_mb": 512,
+        "ram_recommended_mb": 1024,
+        "storage_min_mb": 256,
+        "latency_target_ms": 50,
+        "audio_sample_rate_hz": 48000,
+        "status": "software_ready · hardware_deployed",
+        "deploy_note_zh": "已部署 M200e #1 — Edge 推理与结构标签输出"
+      },
+      "IM3": {
+        "role": "Edge Audio MCU · 低延迟表达层",
+        "ram_budget_mb": 6,
+        "paired_with": "M200e",
+        "status": "deployed",
+        "deploy_note_zh": "已部署 IM3 #1 — 与 M200e 配对 · DSP / 语音表达"
+      }
+    },
+    "chip_requirements_summary": {
+      "edge_soc": "M200e 级 — 4×A55 · ≥512MB RAM · eMMC/SD · <50ms audio callback",
+      "audio_mcu": "IM3 级 — 低延迟 DSP / 表达伴侣芯片",
+      "not_on_edge": ["fm_training", "large_fm_inference"]
+    }
+  },
+  "runtime_surfaces": {
+    "title_zh": "EXIS 核心意义 · 跨场景运行时接入",
+    "core_meaning_zh": "将音乐语言模型与能力标签，锚定到可部署的现实产品面：从 Edge 芯片到互动娱乐与实时流媒体。不是单点生成器，而是可订阅、可约束、可校准的基础设施。",
+    "surfaces": [
+      {
+        "id": "game",
+        "name": "Game Runtime",
+        "protocol": "exis.runtime.game_music.v1",
+        "capabilities_zh": ["自适应配乐", "状态驱动张力", "M200e 本地推理", "NOX scene tags"]
+      },
+      {
+        "id": "stream",
+        "name": "Stream / Broadcast",
+        "protocol": "exis.runtime.stream_adaptive.v1",
+        "capabilities_zh": ["分段结构标签", "实时变奏约束", "云端+Edge 混合"]
+      },
+      {
+        "id": "ue5",
+        "name": "UE5 / MetaSounds",
+        "protocol": "exis.runtime.ue5_metasound.v1",
+        "capabilities_zh": ["结构标签 → MetaSound 参数", "MIDI/Token 桥接", "场景张力同步"]
+      },
+      {
+        "id": "3d",
+        "name": "3D / Spatial Audio",
+        "protocol": "exis.runtime.spatial_audio.v1",
+        "capabilities_zh": ["IM3 低延迟输出", "空间声场表达", "表演层标签驱动"]
+      }
+    ]
+  },
+  "cognition_gap_ref": {
+    "title_zh": "EXIS 音乐认知缺口图 — 当前 vs 爵士/乐队级目标",
+    "layers_complete": ["Layer 0 CMG/Token Pipeline"],
+    "layers_in_progress": ["Layer 1 Style Portrait", "Layer 2 Rule Musician", "Layer 5 AI Band v1"],
+    "layers_roadmap": ["Layer 4 Improvisation Engine", "Layer 6 Musical Cognition"],
+    "note_zh": "Demo M1–M2 覆盖语言层证据；M3–M4 预览 FM/工作流；乐队级即兴为长期缺口"
+  },
+  "feedback_loop_zh": "Layer A 产品数据 → Reality Calibration Feedback → Layer C 内核校准（长期机制）"
+}

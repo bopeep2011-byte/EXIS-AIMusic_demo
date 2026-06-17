@@ -1,0 +1,65 @@
+{
+  "version": "demo_catalog_v06",
+  "naming": "demo1, demo2, ... — 对外不显示曲名/艺人/渲染引擎",
+  "instrument_label": "Acoustic Grand Piano",
+  "m1": {
+    "demo_id": "demo1",
+    "label": "24 bars · Acoustic Grand Piano",
+    "listen_pair_index": 0,
+    "segment_sec": [0, 48]
+  },
+  "m2_presets": [
+    {
+      "demo_id": "demo2-A",
+      "preset_key": "A",
+      "label_zh": "示例 A",
+      "listen_pair_index": 1,
+      "seed_sec": [24, 36],
+      "continuation_sec": [36, 56],
+      "_note": "小节对齐 bar9→bar17，续写从乐句自然展开",
+      "tokens": ["NOTE_ON_60", "DURBIN_4", "VELBIN_6", "NOTE_ON_62", "DURBIN_3", "VELBIN_5", "NOTE_ON_64", "DURBIN_4", "VELBIN_6"]
+    },
+    {
+      "demo_id": "demo2-B",
+      "preset_key": "B",
+      "label_zh": "示例 B",
+      "listen_pair_index": 2,
+      "seed_sec": [92, 106],
+      "continuation_sec": [106, 128],
+      "tokens": ["NOTE_ON_60", "INTVL_unison", "DURBIN_4", "VELBIN_6", "NOTE_ON_64", "INTVL_perfect4th", "DURBIN_4", "VELBIN_6"]
+    },
+    {
+      "demo_id": "demo2-C",
+      "preset_key": "C",
+      "label_zh": "示例 C",
+      "listen_pair_index": 2,
+      "seed_sec": [166, 178],
+      "continuation_sec": [178, 200],
+      "tokens": []
+    }
+  ],
+  "m3": {
+    "demo_id": "demo3",
+    "input_label": "demo3 · 输入",
+    "output_label": "demo3 · 输出",
+    "input_pair_index": 3,
+    "output_pair_index": 5,
+    "input_sec": [8, 28],
+    "output_sec": [95, 119],
+    "_note": "M1=p0 · M2-A=p1 · M2-B/C=p2 · M3 in=p3 out=p5 — 互不重叠"
+  },
+  "m4": {
+    "demos": [
+      {"demo_id": "demo4", "pair_index": 3, "input_sec": [0, 18], "output_sec": [18, 38]},
+      {"demo_id": "demo5", "pair_index": 4, "input_sec": [0, 16], "output_sec": [16, 36]},
+      {"demo_id": "demo6", "pair_index": 5, "input_sec": [0, 20], "output_sec": [20, 40]},
+      {"demo_id": "demo7", "pair_index": 6, "input_sec": [0, 15], "output_sec": [15, 35]},
+      {"demo_id": "demo8", "pair_index": 7, "input_sec": [0, 18], "output_sec": [18, 38]}
+    ]
+  },
+  "default_sample": {
+    "id": "demo1",
+    "title": "demo1",
+    "anno_json": "../exis_studio/foundation_dataset/musician_runtime/midi_training/outputs/layered/annotations/Doctor_My_Eyes.anno.json"
+  }
+}

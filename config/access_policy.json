@@ -1,0 +1,33 @@
+{
+  "version": "exis_aimusic_access_policy_v01",
+  "copyright": "winboy.ai",
+  "trail_program": {
+    "name": "ORIGEN TRAIL",
+    "reference": "ORIGEN_TRAIL_Slides.pptx",
+    "subtitle_zh": "保密预览通道 · Confidential Preview Access"
+  },
+  "nda": {
+    "title_zh": "保密与非披露协议（预览版）",
+    "clauses_zh": [
+      "本演示系统及架构说明均属 winboy.ai 保密信息。",
+      "未经授权不得复制、传播或向第三方披露技术细节。",
+      "预览仅用于合作评估，不构成产品承诺。",
+      "访问记录用于 ORIGEN TRAIL 合规审计。"
+    ],
+    "accept_label_zh": "我已阅读并同意上述保密条款"
+  },
+  "access": {
+    "require_invite_code": false,
+    "default_invite_codes": ["ORIGEN-TRAIL", "WINBOY-PREVIEW"],
+    "session_hours": 24
+  },
+  "hardware_public_names": { "RK3568": "M200e", "M55M1": "IM3" },
+  "public_copy": {
+    "product_title": "EXIS AI Music",
+    "product_subtitle": "音乐工业化生产工具 + 音乐综合智能体",
+    "parent": "EXIS AI",
+    "tagline_zh": "隶属 EXIS AI · 音乐工业化生产工具 + 音乐综合智能体",
+    "tagline_en": "Under EXIS AI · Music Industrialization Toolkit + Comprehensive Music Intelligence Agent",
+    "ecosystem_nav": "文明部署 & 生态集成"
+  }
+}

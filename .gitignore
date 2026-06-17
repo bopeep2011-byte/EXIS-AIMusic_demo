@@ -1,0 +1,46 @@
+# --- 运行时生成（勿提交）---
+cache/
+*.log
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+.venv/
+venv/
+.env
+.env.*
+
+# --- 访问记录（含姓名邮箱）---
+config/access_registry.jsonl
+
+# --- 系统 / IDE ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# --- 大文件 / 数据集（应放外部或 Git LFS，默认不进仓）---
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.safetensors
+*.onnx
+*.wav
+*.mp3
+*.flac
+*.mid
+*.midi
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.iso
+*.mp4
+*.mov
+
+# 允许小体积演示素材（若需 pptx 可去掉下一行）
+# ORIGEN_TRAIL_Slides.pptx

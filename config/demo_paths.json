@@ -1,0 +1,9 @@
+{
+  "version": "exis_aimusic_demo_paths_v01",
+  "foundation_root": "../exis_studio/foundation_dataset",
+  "r0_matrix_root": "../EXIS_R0_Matrix_Root",
+  "civilization_public": "config/civilization_public_v01.json",
+  "demo_catalog": "config/demo_catalog.json",
+  "checkpoint": "../exis_studio/foundation_dataset/musician_runtime/midi_training/outputs/checkpoints/stage1_clm_v11.pt",
+  "listen_pack": "../exis_studio/validation_outputs/musician_runtime/rewire_r1_listen_pack_v1.json"
+}
