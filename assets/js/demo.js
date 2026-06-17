@@ -105,7 +105,11 @@ function showBootError(msg) {
 async function init() {
   $$(".nav-btn").forEach((b) => b.addEventListener("click", () => showModule(b.dataset.module)));
   $("#btn-refresh-m1")?.addEventListener("click", () => loadM1().catch(alert));
-  $("#btn-play-melody")?.addEventListener("click", () => $("#m1-audio")?.play());
+  $("#btn-play-melody")?.addEventListener("click", async () => {
+    const a = $("#m1-audio");
+    if (!a?.src) await loadM1Audio().catch(alert);
+    try { await a?.play(); } catch (e) { alert(e); }
+  });
   $("#btn-run-m2")?.addEventListener("click", () => loadM2("A").catch(alert));
   try {
     await ensureAccessGate(fetchJson);

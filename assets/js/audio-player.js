@@ -29,11 +29,6 @@ function toPlayableUrl(url) {
   return url;
 }
 
-function useSameOriginAudio(url) {
-  const resolved = toPlayableUrl(url);
-  return resolved.startsWith("/");
-}
-
 function setAudioHint(el, text, isError = false) {
   const host = el.closest(".audio-trk") || el.parentElement;
   if (!host) return;
@@ -48,91 +43,51 @@ function setAudioHint(el, text, isError = false) {
   hint.style.color = isError ? "var(--amber)" : "var(--text3)";
 }
 
-function waitForAudioMeta(el, timeoutMs = 90000) {
-  return new Promise((resolve, reject) => {
-    if (el.readyState >= 1) {
-      resolve();
-      return;
-    }
-    const timer = setTimeout(() => resolve(), timeoutMs);
-    const done = () => {
-      clearTimeout(timer);
-      resolve();
-    };
-    const fail = () => {
-      clearTimeout(timer);
-      reject(new Error("audio decode failed"));
-    };
-    el.addEventListener("loadedmetadata", done, { once: true });
-    el.addEventListener("error", fail, { once: true });
-    el.load();
-  });
-}
-
-async function loadViaSrc(el, fullUrl) {
-  setAudioHint(el, "音频加载中…");
-  if (el._blobUrl) {
-    URL.revokeObjectURL(el._blobUrl);
-    el._blobUrl = null;
-  }
-  el.src = fullUrl;
-  try {
-    await waitForAudioMeta(el);
-    const dur = Number.isFinite(el.duration) ? ` · ${el.duration.toFixed(0)}s` : "";
-    setAudioHint(el, `已就绪${dur} · 请点 ▶ 播放`);
-  } catch (e) {
-    throw new Error(`播放器无法解码 (${e.message || e})`);
-  }
-}
-
-async function loadViaBlob(el, fullUrl) {
-  setAudioHint(el, "音频下载中（经 ngrok）…");
-  const headers = { "ngrok-skip-browser-warning": "true" };
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 120000);
-  try {
-    const res = await fetch(fullUrl, {
-      headers,
-      credentials: "omit",
-      mode: "cors",
-      signal: ctrl.signal,
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const ct = res.headers.get("content-type") || "";
-    if (ct.includes("text/html") || ct.includes("text/plain")) {
-      throw new Error("ngrok 拦截页（非音频）");
-    }
-    const blob = await res.blob();
-    if (!blob.size || blob.size < 1000) throw new Error("音频为空");
-    if (el._blobUrl) URL.revokeObjectURL(el._blobUrl);
-    el._blobUrl = URL.createObjectURL(blob);
-    el.src = el._blobUrl;
-    await waitForAudioMeta(el, 30000);
-    setAudioHint(el, `已就绪 · ${(blob.size / 1024 / 1024).toFixed(1)} MB · 请点 ▶ 播放`);
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
 async function loadAudioElement(el, url) {
   if (!el || !url) return;
   const bust = url.includes("?") ? "&" : "?";
   const fullUrl = `${toPlayableUrl(url)}${bust}_t=${Date.now()}`;
+  const viaNgrok = fullUrl.startsWith("http") && fullUrl.includes("ngrok");
+
+  setAudioHint(el, viaNgrok ? "音频下载中（ngrok）…" : "音频下载中…");
+
+  const headers = {};
+  if (viaNgrok) headers["ngrok-skip-browser-warning"] = "true";
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 180000);
+
   try {
-    if (useSameOriginAudio(url)) {
-      await loadViaSrc(el, fullUrl);
-    } else {
-      await loadViaBlob(el, fullUrl);
+    const res = await fetch(fullUrl, {
+      headers,
+      credentials: fullUrl.startsWith("/") ? "same-origin" : "omit",
+      mode: fullUrl.startsWith("/") ? "same-origin" : "cors",
+      signal: ctrl.signal,
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const ct = res.headers.get("content-type") || "";
+    if (ct.includes("text/html") || (ct.includes("text/plain") && !ct.includes("audio"))) {
+      throw new Error("返回的不是音频文件");
     }
+    const blob = await res.blob();
+    if (!blob.size || blob.size < 1000) throw new Error("音频为空");
+
+    if (el._blobUrl) URL.revokeObjectURL(el._blobUrl);
+    el._blobUrl = URL.createObjectURL(blob);
+    el.src = el._blobUrl;
+
+    const mb = (blob.size / 1024 / 1024).toFixed(1);
+    setAudioHint(el, `已就绪 · ${mb} MB · 请点 ▶ 播放`);
   } catch (e) {
     console.error("audio load failed", fullUrl, e);
-    const msg = e.name === "AbortError" ? "下载超时（>120s）" : (e.message || e);
+    const msg = e.name === "AbortError" ? "下载超时（>3分钟）" : (e.message || String(e));
     setAudioHint(el, `音频加载失败：${msg}`, true);
     if (el._blobUrl) URL.revokeObjectURL(el._blobUrl);
     el._blobUrl = null;
     el.removeAttribute("src");
-    el.load();
     throw e;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
@@ -141,7 +96,7 @@ export async function bindAudio(el, url) {
   try {
     await loadAudioElement(el, url);
   } catch {
-    /* hint already shown */
+    /* hint shown */
   }
 }
 
