@@ -1,5 +1,5 @@
 import { ensureAccessGate } from "./access-gate.js";
-import { bindAudio, renderDualPlayers } from "./audio-player.js";
+import { bindAudio, configureAudio, renderDualPlayers } from "./audio-player.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -110,6 +110,7 @@ async function init() {
     document.getElementById("boot-hint")?.remove();
 
     const meta = await fetchJson("/api/meta");
+    configureAudio({ backendOrigin: meta.backend_origin });
     $("#tagline-zh").textContent = meta.tagline_zh || "";
     $("#audio-build").textContent = `audio ${meta.audio_catalog || "?"} · ${meta.demo_build || ""}`;
     if (meta.deploy_mode === "netlify_static") {

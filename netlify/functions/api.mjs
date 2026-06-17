@@ -63,12 +63,35 @@ async function proxyToBackend(event) {
   if (ct) outHeaders["Content-Type"] = ct;
   const buf = Buffer.from(await res.arrayBuffer());
   const isBinary = (ct || "").includes("audio") || (ct || "").includes("octet-stream");
+  if (!isBinary && (ct || "").includes("json")) {
+    try {
+      const data = rewriteAudioUrls(JSON.parse(buf.toString("utf8")), origin);
+      return { statusCode: res.status, headers: outHeaders, body: JSON.stringify(data) };
+    } catch {
+      /* fall through */
+    }
+  }
   return {
     statusCode: res.status,
     headers: outHeaders,
     body: isBinary ? buf.toString("base64") : buf.toString("utf8"),
     isBase64Encoded: isBinary,
   };
+}
+
+function rewriteAudioUrls(value, origin) {
+  if (!origin) return value;
+  const base = origin.replace(/\/$/, "");
+  if (typeof value === "string" && value.startsWith("/api/audio/serve/")) {
+    return `${base}${value}`;
+  }
+  if (Array.isArray(value)) return value.map((v) => rewriteAudioUrls(v, origin));
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, rewriteAudioUrls(v, origin)])
+    );
+  }
+  return value;
 }
 
 function backendRequired(path) {
@@ -114,6 +137,7 @@ export async function handler(event) {
         audio_catalog: catalog?.version || "netlify_static",
         demo_build: DEMO_BUILD,
         deploy_mode: process.env.EXIS_API_ORIGIN ? "netlify+backend" : "netlify_static",
+        backend_origin: process.env.EXIS_API_ORIGIN || null,
       });
     }
 
