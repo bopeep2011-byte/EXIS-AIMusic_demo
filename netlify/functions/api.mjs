@@ -50,7 +50,7 @@ async function proxyToBackend(event) {
   if (!origin) return null;
   const qs = event.rawQuery ? `?${event.rawQuery}` : "";
   const url = `${origin.replace(/\/$/, "")}${event.path}${qs}`;
-  const headers = {};
+  const headers = { "ngrok-skip-browser-warning": "true" };
   if (event.headers["content-type"]) headers["Content-Type"] = event.headers["content-type"];
   if (event.headers.authorization) headers.Authorization = event.headers.authorization;
   const res = await fetch(url, {
