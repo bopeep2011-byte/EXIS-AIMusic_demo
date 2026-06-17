@@ -53,6 +53,7 @@ async function proxyToBackend(event) {
   const headers = { "ngrok-skip-browser-warning": "true" };
   if (event.headers["content-type"]) headers["Content-Type"] = event.headers["content-type"];
   if (event.headers.authorization) headers.Authorization = event.headers.authorization;
+  if (event.headers.range) headers.Range = event.headers.range;
   const res = await fetch(url, {
     method: event.httpMethod,
     headers,
@@ -65,8 +66,7 @@ async function proxyToBackend(event) {
   const isBinary = (ct || "").includes("audio") || (ct || "").includes("octet-stream");
   if (!isBinary && (ct || "").includes("json")) {
     try {
-      const data = rewriteAudioUrls(JSON.parse(buf.toString("utf8")), origin);
-      return { statusCode: res.status, headers: outHeaders, body: JSON.stringify(data) };
+      return { statusCode: res.status, headers: outHeaders, body: buf.toString("utf8") };
     } catch {
       /* fall through */
     }

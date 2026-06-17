@@ -44,9 +44,11 @@ function renderM2(d) {
   $("#m2-input").textContent = (d.input_tokens || []).join(" ");
   $("#m2-predictions").innerHTML = (d.predictions || []).map((p) => barRow(p.token, p.probability * 100)).join("");
   if (d.audio) {
-    bindAudio($("#m2-audio-seed"), d.audio.seed_url);
-    bindAudio($("#m2-audio-cont"), d.audio.continuation_url);
     $("#m2-audio-meta").textContent = `${d.audio.seed_label || ""} · ${d.audio.continuation_label || ""}`;
+    return Promise.all([
+      bindAudio($("#m2-audio-seed"), d.audio.seed_url),
+      bindAudio($("#m2-audio-cont"), d.audio.continuation_url),
+    ]);
   }
 }
 
@@ -65,7 +67,7 @@ function renderM2Presets(data) {
 async function loadM1() { renderM1(await fetchJson("/api/m1/analyze")); }
 async function loadM1Audio() {
   const d = await fetchJson("/api/m1/audio");
-  bindAudio($("#m1-audio"), d.audio_url);
+  await bindAudio($("#m1-audio"), d.audio_url);
   $("#audio-status").textContent = d.label || "24 bars · Acoustic Grand Piano";
   $("#m1-sample-title").textContent = d.demo_id || "demo1";
 }
@@ -73,7 +75,7 @@ async function loadM2(presetKey) {
   const body = { preset: presetKey };
   const raw = $("#m2-token-input")?.value?.trim();
   if (raw) body.tokens = raw.split(/\s+/);
-  renderM2(await fetchJson("/api/m2/predict-audio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }));
+  await renderM2(await fetchJson("/api/m2/predict-audio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }));
 }
 async function loadM3() { renderDualPlayers($("#m3-audio-players"), await fetchJson("/api/m3/audio")); }
 async function loadM4(demoId) {

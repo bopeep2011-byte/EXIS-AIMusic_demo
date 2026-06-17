@@ -38,6 +38,28 @@ _audio_keys: dict[str, Path] = {}
 _model_cache: dict = {}
 _pack_cache: dict | None = None
 
+_CORS_HEADERS = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, ngrok-skip-browser-warning, Range",
+    "Access-Control-Expose-Headers": "Content-Length, Content-Range, Accept-Ranges, Content-Type",
+}
+
+
+@app.before_request
+def _cors_preflight():
+    if request.method == "OPTIONS":
+        resp = app.make_default_options_response()
+        resp.headers.update(_CORS_HEADERS)
+        return resp
+
+
+@app.after_request
+def _cors_headers(resp):
+    if request.path.startswith("/api/"):
+        resp.headers.update(_CORS_HEADERS)
+    return resp
+
 
 def _catalog_ver() -> str:
     return str(_live_catalog().get("version") or "v")
