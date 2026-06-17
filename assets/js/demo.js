@@ -112,6 +112,13 @@ async function init() {
     const meta = await fetchJson("/api/meta");
     $("#tagline-zh").textContent = meta.tagline_zh || "";
     $("#audio-build").textContent = `audio ${meta.audio_catalog || "?"} · ${meta.demo_build || ""}`;
+    if (meta.deploy_mode === "netlify_static") {
+      const hint = document.createElement("p");
+      hint.id = "netlify-hint";
+      hint.style.cssText = "color:var(--amber);font-size:12px;margin-bottom:12px";
+      hint.textContent = "Netlify 预览模式：可浏览界面与 NDA 登录；M1–M4 音频/模型需配置 EXIS_API_ORIGIN 后端或使用本地 start_demo.bat。";
+      $("#tagline-zh")?.after(hint);
+    }
     renderIntegration(await fetchJson("/api/integration"));
     renderM2Presets(await fetchJson("/api/m2/presets"));
 

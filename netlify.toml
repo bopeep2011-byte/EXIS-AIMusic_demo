@@ -1,0 +1,20 @@
+# Netlify static deploy + serverless API shim
+# Full M1–M4 audio/model: set EXIS_API_ORIGIN to your Flask server (e.g. ngrok / cloud VM).
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = [
+    "config/access_policy.json",
+    "config/civilization_public_v01.json",
+    "config/demo_catalog.json"
+  ]
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api"
+  status = 200
+  force = true

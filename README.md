@@ -41,3 +41,33 @@ Do not commit `cache/`, `*.wav`, or model weights. See [GITHUB_SETUP.md](GITHUB_
 ## Confidential
 
 ORIGEN TRAIL NDA gate on first access. `config/access_registry.jsonl` is gitignored.
+
+## Netlify 部署
+
+站点示例：[mxisai-muisc-demo.netlify.app](https://mxisai-muisc-demo.netlify.app/)
+
+Netlify **只能托管静态页面**，本仓库已包含 `netlify.toml` + `netlify/functions/api.mjs`：
+
+| 能力 | Netlify 单独部署 | + Flask 后端 |
+|------|------------------|--------------|
+| NDA 登录 `/api/access/policy` | ✅ | ✅ |
+| 页面 / 文明架构文案 | ✅ | ✅ |
+| M1–M4 音频 / 模型推理 | ❌ | ✅ |
+
+### 部署步骤
+
+1. Netlify 连接 GitHub 仓库 [EXIS-AIMusic_demo](https://github.com/bopeep2011-byte/EXIS-AIMusic_demo)
+2. Build command 留空，Publish directory = `.`（根目录）
+3. 重新 Deploy
+
+### 完整音频体验（可选）
+
+在 Netlify → **Site settings → Environment variables** 添加：
+
+```
+EXIS_API_ORIGIN = https://你的-flask-服务器地址
+```
+
+将 `demo_server.py` 部署到云主机 / Railway / Render，或用 ngrok 暴露本地 `8765` 端口。
+
+未配置时，M1–M4 会提示 `backend_required`，本地完整体验仍用 `start_demo.bat`。
